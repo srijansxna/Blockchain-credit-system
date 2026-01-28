@@ -1,0 +1,20 @@
+# Frontend
+node_modules/
+build/
+dist/
+
+# Backend
+node_modules/
+.env
+wallet/
+
+# Logs & OS
+*.log
+.DS_Store
+
+# IDE
+.vscode/
+
+# Generated / runtime data
+*.enc
+

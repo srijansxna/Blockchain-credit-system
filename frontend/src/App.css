@@ -1,0 +1,71 @@
+.container {
+  width: 650px;
+  margin-top: 40px;
+  padding: 24px;
+
+  border: 1px solid #444;
+  border-radius: 6px;
+  background-color: #1e1e1e;
+}
+
+
+h2 {
+  text-align: center;
+}
+
+form {
+  border: 1px solid #ddd;
+  padding: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin: 6px 0;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* APPROVED (BRIGHT GREEN) */
+.approved {
+  margin-top: 25px;
+  padding: 20px;
+  border: 2px solid #00c853;
+  background-color: #e8fff1;
+  color: #006b2e;
+}
+
+.approved h3 {
+  color: #00c853;
+}
+
+.blockchain {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* REJECTED (RED & BOLD) */
+.rejected {
+  margin-top: 25px;
+  padding: 20px;
+  border: 2px solid #d50000;
+  background-color: #ffecec;
+  color: #b00000;
+}
+
+.rejected h3 {
+  font-weight: bold;
+  color: #d50000;
+}
+
+/* ERROR */
+.error {
+  margin-top: 20px;
+  color: red;
+  font-weight: bold;
+}

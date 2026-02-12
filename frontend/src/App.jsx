@@ -43,7 +43,7 @@ function App() {
 
 
     try {
-      const response = await fetch("http://localhost:3000/credit/apply", {
+      const response = await fetch("https://blockchain-credit-system.onrender.com", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

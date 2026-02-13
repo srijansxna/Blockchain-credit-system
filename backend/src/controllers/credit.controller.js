@@ -2,7 +2,7 @@
  * Credit Controller
  * Orchestrates evaluation, ZKP proof, encryption, and storage
  */
-import { submitCreditToBlockchain } from "../fabric/fabric.service.js";
+//import { submitCreditToBlockchain } from "../fabric/fabric.service.js";
 import { generateLoanId } from "../utils/id.util.js";
 import { createCreditApplication } from "../models/credit.model.js";
 import { evaluateCredit } from "../services/credit.service.js";

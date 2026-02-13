@@ -1,8 +1,11 @@
 /**
  * Credit Controller
  * Orchestrates evaluation, ZKP proof, encryption, and storage
+ * (Blockchain layer mocked for cloud deployment)
  */
+
 //import { submitCreditToBlockchain } from "../fabric/fabric.service.js";
+
 import { generateLoanId } from "../utils/id.util.js";
 import { createCreditApplication } from "../models/credit.model.js";
 import { evaluateCredit } from "../services/credit.service.js";
@@ -16,28 +19,25 @@ export async function applyForCredit(req, res) {
     const loanId = generateLoanId();
 
     // 2. Build canonical credit application
-const application = createCreditApplication({
-  loanId,
-
-  applicant: {
-    name: req.body.fullName,
-    aadhaar: req.body.aadhaarNumber,
-    pan: req.body.panNumber
-  },
-
-  financials: {
-    salary_3_month_avg: req.body.avgSalary,
-    itr: {
-      year_1: req.body.itrYear1,
-      year_2: req.body.itrYear2,
-      year_3: req.body.itrYear3
-    }
-  },
-
-  loan: {
-    amount_requested: req.body.loanAmount
-  }
-});
+    const application = createCreditApplication({
+      loanId,
+      applicant: {
+        name: req.body.fullName,
+        aadhaar: req.body.aadhaarNumber,
+        pan: req.body.panNumber
+      },
+      financials: {
+        salary_3_month_avg: req.body.avgSalary,
+        itr: {
+          year_1: req.body.itrYear1,
+          year_2: req.body.itrYear2,
+          year_3: req.body.itrYear3
+        }
+      },
+      loan: {
+        amount_requested: req.body.loanAmount
+      }
+    });
 
     // 3. Evaluate creditworthiness
     const evaluation = evaluateCredit(application);
@@ -54,13 +54,12 @@ const application = createCreditApplication({
     // 5. Generate ZKP-style eligibility proof
     const proof = generateEligibilityProof(evaluation);
 
-    // 6. Write approved credit proof to blockchain (ONCE, correctly)
-    await submitCreditToBlockchain({
-      loanId,
-      score_commitment: proof.zkp_proof.commitment,
-      approval_status: "true",
+    // 6. MOCK Blockchain Write (Fabric Disabled)
+    const mockBlockchainResponse = {
+      transactionId: "MOCK-TX-" + Math.random().toString(36).substring(2, 12),
+      committed: true,
       timestamp: new Date().toISOString()
-    });
+    };
 
     // 7. Encrypt approved application
     const encrypted = encryptApplication(application);
@@ -72,12 +71,13 @@ const application = createCreditApplication({
       encryption_meta: encrypted.encryption_meta
     });
 
-    // 9. Respond success (include proof summary)
+    // 9. Respond success
     return res.status(200).json({
       loanId,
       status: "ELIGIBLE",
       score: evaluation.final_score,
-      zkp_commitment: proof.zkp_proof.commitment
+      zkp_commitment: proof.zkp_proof.commitment,
+      transactionId: mockBlockchainResponse.transactionId
     });
 
   } catch (error) {

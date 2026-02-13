@@ -1,12 +1,14 @@
-import express from "express";
-import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 
-const app = express();
+import app from "./app.js";
 
-app.use(cors({
-  origin: "https://srijansaxena.github.io"
-}));
+const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
+console.log("Starting server...");
+console.log("PORT from Render:", process.env.PORT);
+console.log("Final PORT used:", PORT);
 
-export default app;
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
+});

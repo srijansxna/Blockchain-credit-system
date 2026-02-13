@@ -129,3 +129,35 @@ export async function applyForCredit(req, res) {
     return res.status(500).json({ error: error.message });
   }
 }
+
+import { evaluateCredit } from "../services/credit.service.js";
+import { generateEligibilityProof } from "../services/zkp.service.js";
+
+export async function applyForCredit(req, res) {
+  try {
+    console.log("STEP 1: Evaluation");
+
+    const dummyApplication = {
+      financials: {
+        salary_3_month_avg: req.body.avgSalary
+      }
+    };
+
+    const evaluation = evaluateCredit(dummyApplication);
+
+    console.log("STEP 2: ZKP generation");
+
+    const proof = generateEligibilityProof(evaluation);
+
+    return res.status(200).json({
+      message: "Evaluation + ZKP working",
+      evaluation,
+      zkp_commitment: proof?.zkp_proof?.commitment || "no commitment"
+    });
+
+  } catch (error) {
+    console.error("ERROR:", error);
+    return res.status(500).json({ error: error.message });
+  }
+}
+

@@ -13,7 +13,7 @@ import { encryptApplication } from "../services/encryption.service.js";
 import { storeApprovedLoan } from "../services/storage.service.js";
 import { generateEligibilityProof } from "../services/zkp.service.js";
 
-export async function applyForCredit(req, res) {
+/**export async function applyForCredit(req, res) {
   try {
     // 1. Generate system loan ID
     const loanId = generateLoanId();
@@ -85,5 +85,25 @@ export async function applyForCredit(req, res) {
     return res.status(500).json({
       error: error.message
     });
+  }
+}*/
+
+export async function applyForCredit(req, res) {
+  try {
+    console.log("STEP 1: Controller entered");
+
+    const loanId = "DEBUG-" + Date.now();
+
+    console.log("STEP 2: Returning early");
+
+    return res.status(200).json({
+      loanId,
+      message: "Controller working",
+      body: req.body
+    });
+
+  } catch (error) {
+    console.error("ERROR:", error);
+    return res.status(500).json({ error: error.message });
   }
 }

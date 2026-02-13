@@ -107,3 +107,25 @@ export async function applyForCredit(req, res) {
     return res.status(500).json({ error: error.message });
   }
 }
+
+import { evaluateCredit } from "../services/credit.service.js";
+
+export async function applyForCredit(req, res) {
+  try {
+    const dummyApplication = {
+      financials: {
+        salary_3_month_avg: req.body.avgSalary
+      }
+    };
+
+    const evaluation = evaluateCredit(dummyApplication);
+
+    return res.status(200).json({
+      message: "Evaluation working",
+      evaluation
+    });
+
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}

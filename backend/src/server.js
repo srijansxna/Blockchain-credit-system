@@ -1,12 +1,12 @@
-import dotenv from "dotenv";
-dotenv.config();
-console.log("SERVER.JS LOADED");
-import app from "./app.js";
+import express from "express";
+import cors from "cors";
 
-console.log("BANK_MASTER_KEY loaded:", !!process.env.BANK_MASTER_KEY);
+const app = express();
 
-const PORT = process.env.PORT || 3000;;
+app.use(cors({
+  origin: "https://srijansaxena.github.io"
+}));
 
-app.listen(PORT, () => {
-  console.log(`Backend running on port ${PORT}`);
-});
+app.use(express.json());
+
+export default app;

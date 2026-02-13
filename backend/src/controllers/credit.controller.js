@@ -1,7 +1,6 @@
 /**
  * Credit Controller
- * Isolation Debug Version
- * Evaluation + ZKP + Encryption (No Storage, No Fabric)
+ * Storage Isolation Test
  */
 
 import { generateLoanId } from "../utils/id.util.js";
@@ -9,11 +8,10 @@ import { createCreditApplication } from "../models/credit.model.js";
 import { evaluateCredit } from "../services/credit.service.js";
 import { generateEligibilityProof } from "../services/zkp.service.js";
 import { encryptApplication } from "../services/encryption.service.js";
+import { storeApprovedLoan } from "../services/storage.service.js";
 
 export async function applyForCredit(req, res) {
   try {
-    console.log("STEP 1: Building application");
-
     const loanId = generateLoanId();
 
     const application = createCreditApplication({
@@ -36,29 +34,27 @@ export async function applyForCredit(req, res) {
       }
     });
 
-    console.log("STEP 2: Evaluation");
-
     const evaluation = evaluateCredit(application);
-
-    console.log("STEP 3: ZKP");
-
     const proof = generateEligibilityProof(evaluation);
-
-    console.log("STEP 4: Encryption");
-
     const encrypted = encryptApplication(application);
 
-    return res.status(200).json({
-      message: "Evaluation + ZKP + Encryption working",
+    console.log("TESTING STORAGE");
+
+    storeApprovedLoan({
       loanId,
-      score: evaluation.final_score,
-      zkp_commitment: proof?.zkp_proof?.commitment || "none",
-      encrypted_preview:
-        encrypted?.encrypted_payload?.slice?.(0, 20) || "ok"
+      encrypted_payload: encrypted.encrypted_payload,
+      encryption_meta: encrypted.encryption_meta
+    });
+
+    console.log("STORAGE COMPLETED");
+
+    return res.status(200).json({
+      message: "Storage working",
+      loanId
     });
 
   } catch (error) {
-    console.error("CREDIT FLOW ERROR:", error);
+    console.error("STORAGE ERROR:", error);
     return res.status(500).json({
       error: error.message
     });
